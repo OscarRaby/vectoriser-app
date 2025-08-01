@@ -1,2 +1,1 @@
-streamlit
-scikit-learn
+streamlit, scikit-learn
