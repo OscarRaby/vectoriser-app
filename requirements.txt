@@ -5,3 +5,4 @@ noise
 cairosvg
 svgwrite
 scipy
+pycairo
