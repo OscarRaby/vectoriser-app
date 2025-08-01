@@ -3,3 +3,5 @@ scikit-learn
 scikit-image
 noise
 cairosvg
+svgwrite
+scipy
