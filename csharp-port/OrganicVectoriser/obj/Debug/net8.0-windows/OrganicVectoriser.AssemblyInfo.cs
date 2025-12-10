@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OrganicVectoriser")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1a107f16622272959134a27bfcfcbc0943d41cc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c536430f680d80b6ace3103660f73b84d9806a6a")]
 [assembly: System.Reflection.AssemblyProductAttribute("OrganicVectoriser")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OrganicVectoriser")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
