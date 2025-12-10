@@ -128,99 +128,50 @@ public sealed class DiagnosticsService : IDiagnosticsService
 
     public Mat TestLocalMinima(Mat elevationMap)
     {
-        Log($"[DIAG] Testing local minima detection on elevation map");
+        Log($"[DIAG] Testing local minima detection on elevation map (morphological approach)");
         
-        // Convert to 8U
-        using var elevationU8 = new Mat();
-        elevationMap.ConvertTo(elevationU8, MatType.CV_8UC1, 255);
+        // Python: local_min = morphology.local_minima(elevation_map)
+        // A pixel is a local minimum if it's <= all neighbors (equivalent to elevation == dilated)
+        var localMin = new Mat();
+        var dilated = new Mat();
+        var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new OpenCvSharp.Size(3, 3));
         
-        // Create a binary mask by thresholding at mean - this creates foreground regions
-        var mean = Cv2.Mean(elevationU8);
-        using var binary = new Mat();
-        Cv2.Threshold(elevationU8, binary, mean.Val0, 255, ThresholdTypes.Binary);
-        Log($"[DIAG] Created binary mask with threshold at mean ({mean.Val0:F2})");
+        // Dilate finds the maximum in each neighborhood
+        Cv2.Dilate(elevationMap, dilated, kernel);
         
-        // Invert so we have white foreground (high elevation areas)
-        Cv2.BitwiseNot(binary, binary);
+        // Local minima are where original == dilated (no change means it's a minimum)
+        Cv2.Compare(elevationMap, dilated, localMin, CmpType.EQ);
         
-        // Distance transform on binary image
-        using var dist = new Mat();
-        Cv2.DistanceTransform(binary, dist, DistanceTypes.L2, DistanceTransformMasks.Mask5);
+        kernel.Dispose();
         
-        Cv2.MinMaxLoc(dist, out double minDist, out double maxDist);
-        Log($"[DIAG] Distance transform range: [{minDist:F2}, {maxDist:F2}]");
+        int minimaCount = Cv2.CountNonZero(localMin);
+        double pct = (minimaCount * 100.0 / (elevationMap.Rows * elevationMap.Cols));
+        Log($"[DIAG] Found {minimaCount} local minima pixels ({pct:F2}% of image)");
         
-        if (maxDist > 1e10)
-        {
-            Log($"[DIAG] ERROR: Distance transform returned invalid values (infinity)!");
-            Log($"[DIAG] This indicates the binary mask is all white or all black");
-            int whitePixels = Cv2.CountNonZero(binary);
-            Log($"[DIAG] Binary mask has {whitePixels} white pixels ({(whitePixels * 100.0 / (elevationMap.Rows * elevationMap.Cols)):F2}%)");
-        }
+        SaveMatAsImage(localMin, "03_local_minima.png", "LOCAL_MINIMA");
+        SaveMatAsImage(dilated, "03a_dilated_elevation.png", "DILATED");
+        dilated.Dispose();
         
-        // Save distance transform for visualization
-        var distViz = new Mat();
-        Cv2.Normalize(dist, distViz, 0, 255, NormTypes.MinMax);
-        distViz.ConvertTo(distViz, MatType.CV_8UC1);
-        SaveMatAsImage(distViz, "03a_distance_transform.png", "DISTANCE");
-        SaveMatAsImage(binary, "03a_binary_mask.png", "BINARY");
-        distViz.Dispose();
-        
-        // Threshold to find peaks - try multiple thresholds to see what works
-        Log($"[DIAG] Testing different thresholds:");
-        
-        for (double factor = 0.7; factor >= 0.1; factor -= 0.2)
-        {
-            using var testMax = new Mat();
-            double threshold = factor * maxDist;
-            Cv2.Threshold(dist, testMax, threshold, 255, ThresholdTypes.Binary);
-            testMax.ConvertTo(testMax, MatType.CV_8UC1);
-            int count = Cv2.CountNonZero(testMax);
-            Log($"[DIAG]   Threshold {factor:F1} * maxDist ({threshold:F2}): {count} pixels ({(count * 100.0 / (elevationMap.Rows * elevationMap.Cols)):F2}%)");
-        }
-        
-        // Use 0.5 * maxDist as threshold (more selective than 0.3)
-        using var localMax = new Mat();
-        double finalThreshold = 0.5 * maxDist;
-        Cv2.Threshold(dist, localMax, finalThreshold, 255, ThresholdTypes.Binary);
-        localMax.ConvertTo(localMax, MatType.CV_8UC1);
-        
-        Log($"[DIAG] Final threshold used: {finalThreshold:F2}");
-        
-        // Count non-zero pixels (potential marker points)
-        int markerCount = Cv2.CountNonZero(localMax);
-        Log($"[DIAG] Found {markerCount} potential marker points ({(markerCount * 100.0 / (elevationMap.Rows * elevationMap.Cols)):F2}% of image)");
-        
-        SaveMatAsImage(localMax, "03b_local_maxima.png", "MARKERS");
-        return localMax;
+        return localMin;
     }
 
     public Mat TestWatershed(Mat rgb, Mat elevationMap)
     {
         Log($"[DIAG] Testing watershed segmentation");
         
-        // Use the same binary mask approach as TestLocalMinima
-        using var elevationU8 = new Mat();
-        elevationMap.ConvertTo(elevationU8, MatType.CV_8UC1, 255);
-        
-        var mean = Cv2.Mean(elevationU8);
-        using var binary = new Mat();
-        Cv2.Threshold(elevationU8, binary, mean.Val0, 255, ThresholdTypes.Binary);
-        Cv2.BitwiseNot(binary, binary);
-        
-        using var dist = new Mat();
-        Cv2.DistanceTransform(binary, dist, DistanceTypes.L2, DistanceTransformMasks.Mask5);
-        Cv2.MinMaxLoc(dist, out _, out double maxVal);
-        
-        Log($"[DIAG] Watershed distance transform max: {maxVal:F2}");
-        
-        using var localMax = new Mat();
-        Cv2.Threshold(dist, localMax, 0.5 * maxVal, 255, ThresholdTypes.Binary);
-        localMax.ConvertTo(localMax, MatType.CV_8UC1);
+        // Use morphological local minima (same as TestLocalMinima)
+        var localMin = new Mat();
+        var dilated = new Mat();
+        var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new OpenCvSharp.Size(3, 3));
+        Cv2.Dilate(elevationMap, dilated, kernel);
+        Cv2.Compare(elevationMap, dilated, localMin, CmpType.EQ);
+        kernel.Dispose();
+        dilated.Dispose();
         
         // Get connected components
         var markers = new Mat();
-        int numComponents = Cv2.ConnectedComponents(localMax, markers);
+        int numComponents = Cv2.ConnectedComponents(localMin, markers);
+        localMin.Dispose();
         markers.ConvertTo(markers, MatType.CV_32SC1);
         Log($"[DIAG] Connected components found: {numComponents}");
         

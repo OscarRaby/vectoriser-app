@@ -473,21 +473,22 @@ public sealed class PipelineService : IPipelineService
             Cv2.AddWeighted(blurred, 0.7, noise, 0.3, 0, elevation);
             LogPipeline($"[NoiseWatershed] Elevation map combined");
 
-            // Find local minima (distance transform approach or morphological min filter)
-            using var elevationU8 = new Mat();
-            elevation.ConvertTo(elevationU8, MatType.CV_8UC1, 255);
-            Cv2.BitwiseNot(elevationU8, elevationU8);
-            using var dist = new Mat();
-            Cv2.DistanceTransform(elevationU8, dist, DistanceTypes.L2, DistanceTransformMasks.Mask5);
-            using var localMax = new Mat();
-            Cv2.MinMaxLoc(dist, out _, out double maxVal);
-            Cv2.Threshold(dist, localMax, 0.3 * maxVal, 255, ThresholdTypes.Binary);
-            localMax.ConvertTo(localMax, MatType.CV_8UC1);
-            LogPipeline($"[NoiseWatershed] Local maxima found");
+            // Find local minima using morphological approach (matches Python's morphology.local_minima)
+            // Python: local_min = morphology.local_minima(elevation_map)
+            // Strategy: A pixel is a local minimum if it's <= all its neighbors
+            using var localMin = new Mat();
+            using var dilated = new Mat();
+            var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new OpenCvSharp.Size(3, 3));
+            Cv2.Dilate(elevation, dilated, kernel);
+            // Local minima are where elevation == dilated (i.e., dilation didn't change the value)
+            Cv2.Compare(elevation, dilated, localMin, CmpType.EQ);
+            LogPipeline($"[NoiseWatershed] Local minima found");
 
-            // Label markers
+            // Label markers (connected components of local minima)
             var markers = new Mat();
-            Cv2.ConnectedComponents(localMax, markers);
+            Cv2.ConnectedComponents(localMin, markers);
+            kernel.Dispose();
+            dilated.Dispose();
             markers.ConvertTo(markers, MatType.CV_32SC1);
             LogPipeline($"[NoiseWatershed] Connected components labeled");
 
