@@ -1,0 +1,12 @@
+{
+  "borderless": false,
+  "background": "#222222",
+  "font": "Segoe UI",
+  "font_size": 10,
+  "input_bg": "#333333",
+  "input_fg": "#EEEEEE",
+  "label_fg": "#CCCCCC",
+  "button_bg": "#222222",
+  "button_fg": "#AAAAAA",
+  "highlight": "#222222"
+}
