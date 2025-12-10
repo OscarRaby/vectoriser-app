@@ -1,0 +1,35 @@
+# Build directories
+build/
+cmake-build-*/
+
+# Generated test files
+test_*.png
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# Compiled files
+*.o
+*.obj
+*.exe
+*.lib
+*.a
+*.so
+*.dll
+*.dylib
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
