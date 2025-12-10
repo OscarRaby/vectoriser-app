@@ -94,6 +94,7 @@ public sealed class MainViewModel : BaseViewModel
     public RelayCommand DeletePresetCommand { get; }
     public RelayCommand UndoCommand { get; }
     public RelayCommand RedoCommand { get; }
+    public AsyncRelayCommand DiagnosticsCommand { get; }
 
     private BitmapSource? _currentBitmap;
 
@@ -107,6 +108,7 @@ public sealed class MainViewModel : BaseViewModel
         DeletePresetCommand = new RelayCommand(DeletePreset);
         UndoCommand = new RelayCommand(() => { /* TODO */ });
         RedoCommand = new RelayCommand(() => { /* TODO */ });
+        DiagnosticsCommand = new AsyncRelayCommand(RunDiagnosticsAsync, () => _currentBitmap is not null);
 
         // Load available presets asynchronously
         _ = RefreshPresetsAsync();
@@ -138,6 +140,7 @@ public sealed class MainViewModel : BaseViewModel
                     // Notify commands that image is now available
                     PreviewCommand.RaiseCanExecuteChanged();
                     RunCommand.RaiseCanExecuteChanged();
+                    DiagnosticsCommand.RaiseCanExecuteChanged();
                 });
             }
             catch (Exception ex)
@@ -228,6 +231,44 @@ public sealed class MainViewModel : BaseViewModel
                 });
             }
             Progress = 0;
+        }
+    }
+
+    private async Task RunDiagnosticsAsync()
+    {
+        if (_currentBitmap is null) return;
+        try
+        {
+            Status = "Running diagnostics...";
+            var input = ExtractBitmap(_currentBitmap);
+            await _pipelineService.RunDiagnosticsAsync(input, Parameters).ConfigureAwait(false);
+            
+            await App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                var appDataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+                var diagPath = System.IO.Path.Combine(appDataPath, "OrganicVectoriser", "diagnostics");
+                var diagLog = System.IO.Path.Combine(diagPath, "diagnostics.log");
+                
+                Status = $"Diagnostics complete! Check {diagPath}";
+                
+                var message = $"Diagnostic results saved to:\n{diagPath}\n\n" +
+                             $"Files created:\n" +
+                             $"• 01_noise_*.png\n" +
+                             $"• 02_elevation_*.png\n" +
+                             $"• 03a_distance_transform.png\n" +
+                             $"• 03b_local_maxima.png\n" +
+                             $"• 04_watershed_result.png\n" +
+                             $"• diagnostics.log (detailed output)\n\n" +
+                             $"Open diagnostics.log to see all statistics!";
+                
+                System.Windows.MessageBox.Show(message, "Diagnostics Complete", 
+                    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            });
+        }
+        catch (Exception ex)
+        {
+            Status = $"Diagnostics failed: {ex.Message}";
+            System.Diagnostics.Debug.WriteLine($"Diagnostics error: {ex}");
         }
     }
 

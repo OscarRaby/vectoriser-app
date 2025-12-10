@@ -164,6 +164,7 @@
             <Button Content="Load Image" Command="{Binding LoadImageCommand}" Margin="0 0 0 8" />
             <Button Content="Preview" Command="{Binding PreviewCommand}" Margin="0 0 0 8" />
             <Button Content="Run Vectoriser" Command="{Binding RunCommand}" Margin="0 0 0 8" />
+            <Button Content="Run Diagnostics" Command="{Binding DiagnosticsCommand}" Margin="0 0 0 8" Background="#FFF0E68C" ToolTip="Debug pipeline stages individually" />
 
             <ProgressBar Minimum="0" Maximum="100" Height="18" Value="{Binding Progress}" />
             <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Margin="0 6 0 0" />

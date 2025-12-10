@@ -15,6 +15,7 @@ public interface IPipelineService
 {
     Task<PipelineResult> RunAsync(BitmapInput input, ParameterSet parameters, ModifierFlags modifiers);
     Task<PipelineResult> PreviewAsync(BitmapInput input, ParameterSet parameters, ModifierFlags modifiers);
+    Task RunDiagnosticsAsync(BitmapInput input, ParameterSet parameters);
 }
 
 public sealed class PipelineService : IPipelineService
@@ -671,6 +672,91 @@ public sealed class PipelineService : IPipelineService
         {
             // Silent fail for logging
         }
+    }
+
+    public Task RunDiagnosticsAsync(BitmapInput input, ParameterSet p)
+    {
+        return Task.Run(() =>
+        {
+            var diagLogPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "OrganicVectoriser",
+                "diagnostics",
+                "diagnostics.log"
+            );
+            
+            void LogDiag(string msg)
+            {
+                var line = $"[{DateTime.Now:HH:mm:ss.fff}] {msg}";
+                Console.WriteLine(line);
+                try { File.AppendAllText(diagLogPath, line + "\n"); } catch { }
+            }
+            
+            try
+            {
+                // Clear old log
+                try { File.Delete(diagLogPath); } catch { }
+                
+                LogDiag("[DIAGNOSTICS] Starting diagnostic pipeline");
+                LogPipeline("[DIAGNOSTICS] Starting diagnostic pipeline");
+
+                var diag = new DiagnosticsService();
+
+                // Convert input to Mat
+                using var mat = Mat.FromPixelData(input.Height, input.Width, MatType.CV_8UC3, input.Pixels);
+                var rgb = new Mat();
+                Cv2.CvtColor(mat, rgb, ColorConversionCodes.BGR2RGB);
+
+                // Get scale factor
+                var scaleFactor = GetScaleFactor(input.Width, input.Height);
+                var multiplier = Math.Max(p.SegmentationMultiplier, 1e-6);
+                var noiseScale = Math.Max(1.0, p.NoiseScale * multiplier / scaleFactor);
+                var blurSigma = Math.Max(1e-6, p.BlurSigma * scaleFactor / multiplier);
+
+                LogDiag($"[DIAGNOSTICS] Image: {input.Width}x{input.Height}");
+                LogDiag($"[DIAGNOSTICS] Scale factor: {scaleFactor:F2}");
+                LogDiag($"[DIAGNOSTICS] Multiplier: {multiplier:F2}");
+                LogDiag($"[DIAGNOSTICS] Scaled NoiseScale: {noiseScale:F2}");
+                LogDiag($"[DIAGNOSTICS] Scaled BlurSigma: {blurSigma:F2}");
+                LogDiag("");
+
+                // Stage 1: Test noise generation
+                LogDiag("=== STAGE 1: NOISE GENERATION ===");
+                using var noise = diag.TestNoiseGeneration(input.Width, input.Height, noiseScale);
+                LogDiag("");
+
+                // Stage 2: Test elevation map
+                LogDiag("=== STAGE 2: ELEVATION MAP ===");
+                using var elevation = diag.TestElevationMap(rgb, blurSigma, noiseScale);
+                LogDiag("");
+
+                // Stage 3: Test local minima
+                LogDiag("=== STAGE 3: LOCAL MINIMA ===");
+                using var localMinima = diag.TestLocalMinima(elevation);
+                LogDiag("");
+
+                // Stage 4: Test watershed
+                LogDiag("=== STAGE 4: WATERSHED ===");
+                using var watershed = diag.TestWatershed(rgb, elevation);
+                LogDiag("");
+
+                // Statistics
+                LogDiag("=== STATISTICS ===");
+                var stats = diag.GetLabelStatistics(watershed);
+                foreach (var line in stats.Split('\n'))
+                    LogDiag(line);
+
+                rgb.Dispose();
+                LogPipeline("[DIAGNOSTICS] Diagnostic pipeline completed");
+                LogDiag("[DIAGNOSTICS] Completed! Check diagnostics folder for images and this log file.");
+            }
+            catch (Exception ex)
+            {
+                LogPipeline($"[DIAGNOSTICS] Error: {ex.Message}\n{ex.StackTrace}");
+                LogDiag($"[DIAGNOSTICS] Error: {ex.Message}");
+                LogDiag($"[DIAGNOSTICS] Stack trace: {ex.StackTrace}");
+            }
+        });
     }
 }
 
