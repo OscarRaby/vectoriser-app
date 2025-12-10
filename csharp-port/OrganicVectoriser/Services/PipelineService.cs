@@ -58,10 +58,12 @@ public sealed class PipelineService : IPipelineService
             if (rgb.Empty())
                 throw new InvalidOperationException("Failed to convert color space");
 
-            // Scale parameters by image size
+            // Scale parameters by image size (inverse scaling for noise to maintain grain size)
             var scaleFactor = GetScaleFactor(input.Width, input.Height);
             var multiplier = Math.Max(p.SegmentationMultiplier, 1e-6);
-            var noiseScale = Math.Max(1e-6, p.NoiseScale * scaleFactor / multiplier);
+            // Noise scale should DECREASE for larger images to maintain same grain size
+            // This matches Python's pnoise2 behavior where scale is a frequency divisor
+            var noiseScale = Math.Max(1.0, p.NoiseScale * multiplier / scaleFactor);
             var blurSigma = Math.Max(1e-6, p.BlurSigma * scaleFactor / multiplier);
             var compactness = Math.Max(1e-6, p.Compactness * scaleFactor / multiplier);
 

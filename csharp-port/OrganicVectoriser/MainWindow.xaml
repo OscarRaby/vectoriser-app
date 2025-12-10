@@ -27,7 +27,7 @@
                 <Separator />
 
                 <TextBlock Text="Noise Scale" />
-                <Slider Minimum="0" Maximum="1000" TickFrequency="10" Value="{Binding Parameters.NoiseScale, Mode=TwoWay}" />
+                <Slider Minimum="10" Maximum="200" TickFrequency="5" Value="{Binding Parameters.NoiseScale, Mode=TwoWay}" />
 
                 <TextBlock Text="Blur Sigma" />
                 <Slider Minimum="0.1" Maximum="10" TickFrequency="0.1" Value="{Binding Parameters.BlurSigma, Mode=TwoWay}" />
