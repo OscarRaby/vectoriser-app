@@ -1,7 +1,10 @@
-streamlit
-scikit-learn
+numpy
+Pillow
+matplotlib
 scikit-image
+scikit-learn
+scipy
 noise
 cairosvg
 svgwrite
-scipy
+streamlit
