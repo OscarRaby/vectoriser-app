@@ -1,0 +1,47 @@
+{
+  "01": {
+    "parameters": {
+      "noiseScale": 80.64564564564566,
+      "blurSigma": 2,
+      "compactness": 0.07043750000000001,
+      "maxColors": 8,
+      "bridgeDistance": 5,
+      "colorTolerance": 10,
+      "proximityThreshold": 50,
+      "falloffRadius": 5,
+      "maxCurvatureDegrees": 160,
+      "smoothIterations": 3,
+      "smoothAlpha": 0.3,
+      "blobInflationAmount": 4.129129129129129,
+      "farPointInflationFactor": 1,
+      "inflationProportionalToStacking": true,
+      "stackingOrder": "System.Windows.Controls.ComboBoxItem: brightness",
+      "segmentationMultiplier": 1,
+      "dropletStyle": "painterly",
+      "dropletDensity": 1,
+      "dropletMinDistance": 5,
+      "dropletMaxDistance": 15,
+      "dropletSizeMean": 3,
+      "dropletSizeStd": 1,
+      "dropletSpreadDegrees": 5,
+      "dropletOrganicMinBrightness": 128,
+      "dropletOrganicDensity": 3,
+      "dropletOrganicStrength": 1,
+      "dropletOrganicJitter": 0.5,
+      "dropletOrganicElongation": 0,
+      "dropletOrganicPercentPerBlob": 100,
+      "painterlyUseSvgEllipses": false,
+      "painterlySvgPrimitive": "ellipse",
+      "dropletGlobalRotation": 0,
+      "painterlyRectHorizontal": false,
+      "simplifyTolerance": 0.5
+    },
+    "modifiers": {
+      "colorQuantization": true,
+      "bridging": true,
+      "smoothing": true,
+      "inflation": true,
+      "enableVectorPreview": true
+    }
+  }
+}

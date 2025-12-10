@@ -871,6 +871,8 @@ class OrganicSegmentationGUI:
         img_np = self.img_np
         # scale parameters
         crop_shape = (150, 150)
+        if img_np is None or not hasattr(img_np, "shape"):
+            raise ValueError("Input image is not loaded or invalid.")
         scale_factor = self.get_scale_factor(img_np.shape, crop_shape=crop_shape)
         multiplier = self.param_vars["Segmentation Multiplier"].get()
         if multiplier == 0:

@@ -1,0 +1,198 @@
+<Window x:Class="OrganicVectoriser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:OrganicVectoriser.ViewModels"
+        mc:Ignorable="d"
+        Title="Organic Segmentation Vectoriser" Height="720" Width="1200">
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="5*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Left: scrollable parameters -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="4">
+                <TextBlock Text="Segmentation Parameters" FontWeight="Bold" FontSize="14" />
+                <Separator />
+
+                <TextBlock Text="Noise Scale" />
+                <Slider Minimum="0" Maximum="1000" TickFrequency="10" Value="{Binding Parameters.NoiseScale, Mode=TwoWay}" />
+
+                <TextBlock Text="Blur Sigma" />
+                <Slider Minimum="0.1" Maximum="10" TickFrequency="0.1" Value="{Binding Parameters.BlurSigma, Mode=TwoWay}" />
+
+                <TextBlock Text="Compactness" />
+                <Slider Minimum="0.0001" Maximum="1" TickFrequency="0.001" Value="{Binding Parameters.Compactness, Mode=TwoWay}" />
+
+                <TextBlock Text="Max Colors" />
+                <Slider Minimum="2" Maximum="32" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.MaxColors, Mode=TwoWay}" />
+
+                <TextBlock Text="Segmentation Multiplier" />
+                <Slider Minimum="0.1" Maximum="10" TickFrequency="0.1" Value="{Binding Parameters.SegmentationMultiplier, Mode=TwoWay}" />
+
+                <Separator Margin="0 8 0 8" />
+                <TextBlock Text="Bridging Parameters" FontWeight="Bold" />
+
+                <TextBlock Text="Bridge Distance" />
+                <Slider Minimum="0" Maximum="100" TickFrequency="1" Value="{Binding Parameters.BridgeDistance, Mode=TwoWay}" />
+
+                <TextBlock Text="Color Tolerance" />
+                <Slider Minimum="0" Maximum="100" TickFrequency="1" Value="{Binding Parameters.ColorTolerance, Mode=TwoWay}" />
+
+                <TextBlock Text="Proximity Threshold" />
+                <Slider Minimum="0" Maximum="200" TickFrequency="1" Value="{Binding Parameters.ProximityThreshold, Mode=TwoWay}" />
+
+                <TextBlock Text="Falloff Radius" />
+                <Slider Minimum="1" Maximum="30" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.FalloffRadius, Mode=TwoWay}" />
+
+                <TextBlock Text="Max Curvature (degrees)" />
+                <Slider Minimum="1" Maximum="360" TickFrequency="1" Value="{Binding Parameters.MaxCurvatureDegrees, Mode=TwoWay}" />
+
+                <Separator Margin="0 8 0 8" />
+                <TextBlock Text="Smoothing &amp; Inflation" FontWeight="Bold" />
+
+                <TextBlock Text="Smooth Iterations" />
+                <Slider Minimum="1" Maximum="20" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.SmoothIterations, Mode=TwoWay}" />
+
+                <TextBlock Text="Smooth Alpha" />
+                <Slider Minimum="0.01" Maximum="1" TickFrequency="0.01" Value="{Binding Parameters.SmoothAlpha, Mode=TwoWay}" />
+
+                <TextBlock Text="Blob Inflation Amount" />
+                <Slider Minimum="0" Maximum="50" TickFrequency="0.1" Value="{Binding Parameters.BlobInflationAmount, Mode=TwoWay}" />
+
+                <TextBlock Text="Far Point Inflation Factor" />
+                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.FarPointInflationFactor, Mode=TwoWay}" />
+
+                <CheckBox Content="Inflation Proportional to Stacking" IsChecked="{Binding Parameters.InflationProportionalToStacking, Mode=TwoWay}" />
+
+                <Separator Margin="0 8 0 8" />
+                <TextBlock Text="Droplet Parameters (Painterly)" FontWeight="Bold" />
+
+                <TextBlock Text="Droplet Density" />
+                <Slider Minimum="0" Maximum="10" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.DropletDensity, Mode=TwoWay}" />
+
+                <TextBlock Text="Droplet Min Distance" />
+                <Slider Minimum="0" Maximum="100" TickFrequency="1" Value="{Binding Parameters.DropletMinDistance, Mode=TwoWay}" />
+
+                <TextBlock Text="Droplet Max Distance" />
+                <Slider Minimum="0" Maximum="200" TickFrequency="1" Value="{Binding Parameters.DropletMaxDistance, Mode=TwoWay}" />
+
+                <TextBlock Text="Droplet Size Mean" />
+                <Slider Minimum="1" Maximum="50" TickFrequency="0.1" Value="{Binding Parameters.DropletSizeMean, Mode=TwoWay}" />
+
+                <TextBlock Text="Droplet Size Std" />
+                <Slider Minimum="0" Maximum="20" TickFrequency="0.1" Value="{Binding Parameters.DropletSizeStd, Mode=TwoWay}" />
+
+                <TextBlock Text="Droplet Spread (degrees)" />
+                <Slider Minimum="0" Maximum="90" TickFrequency="1" Value="{Binding Parameters.DropletSpreadDegrees, Mode=TwoWay}" />
+
+                <TextBlock Text="Droplet Global Rotation (degrees)" />
+                <Slider Minimum="-180" Maximum="180" TickFrequency="1" Value="{Binding Parameters.DropletGlobalRotation, Mode=TwoWay}" />
+
+                <CheckBox Content="Use SVG Primitives (Ellipse/Rect)" IsChecked="{Binding Parameters.PainterlyUseSvgEllipses, Mode=TwoWay}" />
+                <CheckBox Content="Rect Horizontal Mode" IsChecked="{Binding Parameters.PainterlyRectHorizontal, Mode=TwoWay}" />
+
+                <Separator Margin="0 8 0 8" />
+                <TextBlock Text="Organic Droplet Parameters" FontWeight="Bold" />
+
+                <TextBlock Text="Organic Min Brightness (0-255)" />
+                <Slider Minimum="0" Maximum="255" TickFrequency="1" Value="{Binding Parameters.DropletOrganicMinBrightness, Mode=TwoWay}" />
+
+                <TextBlock Text="Organic Density" />
+                <Slider Minimum="0" Maximum="20" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.DropletOrganicDensity, Mode=TwoWay}" />
+
+                <TextBlock Text="Organic Strength" />
+                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.DropletOrganicStrength, Mode=TwoWay}" />
+
+                <TextBlock Text="Organic Jitter" />
+                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.DropletOrganicJitter, Mode=TwoWay}" />
+
+                <TextBlock Text="Organic Elongation" />
+                <Slider Minimum="-2" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.DropletOrganicElongation, Mode=TwoWay}" />
+
+                <TextBlock Text="Organic Percent Per Blob (%)" />
+                <Slider Minimum="0" Maximum="100" TickFrequency="0.1" Value="{Binding Parameters.DropletOrganicPercentPerBlob, Mode=TwoWay}" />
+
+                <Separator Margin="0 8 0 8" />
+                <TextBlock Text="Other Settings" FontWeight="Bold" />
+
+                <TextBlock Text="Simplify Tolerance (pixels)" />
+                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.SimplifyTolerance, Mode=TwoWay}" />
+
+                <TextBlock Text="Stacking Order" />
+                <ComboBox SelectedValue="{Binding Parameters.StackingOrder, Mode=TwoWay}">
+                    <ComboBoxItem Content="area" />
+                    <ComboBoxItem Content="area_reverse" />
+                    <ComboBoxItem Content="brightness" />
+                    <ComboBoxItem Content="brightness_reverse" />
+                    <ComboBoxItem Content="position_x" />
+                    <ComboBoxItem Content="position_x_reverse" />
+                    <ComboBoxItem Content="position_y" />
+                    <ComboBoxItem Content="position_y_reverse" />
+                    <ComboBoxItem Content="position_centre" />
+                    <ComboBoxItem Content="position_centre_reverse" />
+                </ComboBox>
+
+                <Separator Margin="0 8 0 8" />
+                <TextBlock Text="Modifiers" FontWeight="Bold" />
+
+                <CheckBox Content="Color Quantization" IsChecked="{Binding Modifiers.ColorQuantization, Mode=TwoWay}" />
+                <CheckBox Content="Bridging" IsChecked="{Binding Modifiers.Bridging, Mode=TwoWay}" />
+                <CheckBox Content="Smoothing" IsChecked="{Binding Modifiers.Smoothing, Mode=TwoWay}" />
+                <CheckBox Content="Inflation" IsChecked="{Binding Modifiers.Inflation, Mode=TwoWay}" />
+                <CheckBox Content="Enable Vector Preview" IsChecked="{Binding Modifiers.EnableVectorPreview, Mode=TwoWay}" />
+
+                <Separator Margin="0 8 0 8" />
+                <TextBlock Text="SVG Output Path" />
+                <TextBox Text="{Binding SvgOutputPath, Mode=TwoWay}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Middle: actions/status -->
+        <StackPanel Grid.Column="1" Margin="8" VerticalAlignment="Stretch">
+            <Button Content="Load Image" Command="{Binding LoadImageCommand}" Margin="0 0 0 8" />
+            <Button Content="Preview" Command="{Binding PreviewCommand}" Margin="0 0 0 8" />
+            <Button Content="Run Vectoriser" Command="{Binding RunCommand}" Margin="0 0 0 8" />
+
+            <ProgressBar Minimum="0" Maximum="100" Height="18" Value="{Binding Progress}" />
+            <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Margin="0 6 0 0" />
+
+            <Separator Margin="0 12 0 12" />
+            <TextBlock Text="Presets (TBD)" FontWeight="Bold" />
+            <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
+                <TextBox Width="140" Text="{Binding CurrentPresetName, Mode=TwoWay}" />
+                <Button Content="Save" Command="{Binding SavePresetCommand}" Margin="6 0 0 0" />
+            </StackPanel>
+            <ComboBox ItemsSource="{Binding AvailablePresets}" SelectedItem="{Binding SelectedPreset}" />
+            <Button Content="Load" Command="{Binding LoadPresetCommand}" Margin="0 4 0 0" />
+            <Button Content="Delete" Command="{Binding DeletePresetCommand}" Margin="0 4 0 0" />
+
+            <Separator Margin="0 12 0 12" />
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Undo" Command="{Binding UndoCommand}" Margin="0 0 6 0" />
+                <Button Content="Redo" Command="{Binding RedoCommand}" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Right: preview -->
+        <Border Grid.Column="2" Margin="8" BorderBrush="Gray" BorderThickness="1" Background="#111">
+            <Grid>
+                <Viewbox Stretch="Uniform">
+                    <Image Source="{Binding PreviewImage}" Width="800" Height="600" />
+                </Viewbox>
+                <TextBlock Text="Preview pending" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsPreviewAvailable, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
