@@ -3,6 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
+#include <map>
 
 namespace Vectoriser {
 
@@ -72,6 +73,10 @@ struct BridgingParams {
 struct SmoothingParams {
     int iterations = 3;              // Smoothing passes (1-20)
     double alpha = 0.3;              // Smoothing strength (0.01-1.0)
+    
+    // Aliases for pipeline compatibility
+    int& smoothingIterations = iterations;
+    double& smoothingAlpha = alpha;
 };
 
 // Contour inflation parameters
@@ -117,6 +122,7 @@ struct SVGParams {
     std::string outputPath = "output.svg";
     double simplifyTolerance = 0.5;  // Douglas-Peucker tolerance in pixels (0-5)
     bool quantizeCoordinates = true; // Round to integers for smaller files
+    StackingOrder stackingOrder = StackingOrder::AREA; // Z-order sorting method
 };
 
 // Pipeline modifier flags
@@ -156,6 +162,7 @@ struct ContourData {
     cv::Point2d centroid;            // Centroid
     cv::Vec3b color;                 // Dominant color
     double area;                     // Contour area
+    double luminance = 0.0;          // Luminance (0-255)
 };
 
 // Pipeline execution result
@@ -163,16 +170,9 @@ struct PipelineResult {
     std::vector<ContourData> contours;
     std::vector<DropletDescriptor> droplets;
     std::vector<size_t> zOrderIndices;  // Sorted indices
-    double totalExecutionTime = 0.0;     // Milliseconds
-    
-    // Stage-by-stage timing
-    double segmentationTime = 0.0;
-    double quantizationTime = 0.0;
-    double bridgingTime = 0.0;
-    double smoothingTime = 0.0;
-    double inflationTime = 0.0;
-    double dropletTime = 0.0;
-    
+    cv::Size imageSize;                  // Original image size
+    std::map<std::string, double> timings; // Stage timings (ms)
+    double totalTimeMs = 0.0;            // Total execution time (ms)
     bool success = false;
     std::string errorMessage;
 };

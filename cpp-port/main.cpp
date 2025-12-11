@@ -2,6 +2,11 @@
 #include "SegmentationService.h"
 #include "ContourService.h"
 #include "GeometryService.h"
+#include "BridgingService.h"
+#include "SortingService.h"
+#include "SVGWriter.h"
+#include "ParameterScaler.h"
+#include "VectorizationPipeline.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <chrono>
@@ -291,6 +296,76 @@ void TestFullPipeline(const cv::Mat& image) {
     std::cout << "  Saved: test_pipeline_result.png\n";
 }
 
+void TestCompletePipeline(const cv::Mat& image) {
+    std::cout << "\n=== Testing Complete Vectorization Pipeline ===\n";
+    
+    // Setup parameters
+    SegmentationParams segParams;
+    segParams.noiseScale = 60.0;
+    segParams.blurSigma = 2.0;
+    segParams.compactness = 0.001;
+    segParams.referenceCropSize = cv::Size(512, 512);
+    segParams.scalingMethod = ScalingMethod::SQRT_AREA;
+    segParams.segmentationMultiplier = 1.0;
+    
+    QuantizationParams quantParams;
+    quantParams.maxColors = 8;
+    
+    BridgingParams bridgingParams;
+    bridgingParams.proximityThreshold = 20.0;
+    bridgingParams.colorTolerance = 30.0;
+    bridgingParams.bridgeDistance = 3.0;
+    bridgingParams.falloffRadius = 5;
+    bridgingParams.maxCurvature = 45.0;
+    
+    SmoothingParams smoothParams;
+    smoothParams.smoothingIterations = 5;
+    smoothParams.smoothingAlpha = 0.5;
+    
+    InflationParams inflationParams;
+    inflationParams.inflationAmount = 2.0;
+    inflationParams.farPointFactor = 1.5;
+    
+    DropletParams dropletParams;
+    // Not used yet
+    
+    SVGParams svgParams;
+    svgParams.stackingOrder = StackingOrder::AREA;
+    svgParams.simplifyTolerance = 1.0;
+    svgParams.quantizeCoordinates = true;
+    
+    ModifierFlags modifiers;
+    modifiers.enableBridging = true;
+    modifiers.enableSmoothing = true;
+    modifiers.enableInflation = true;
+    
+    // Execute pipeline
+    auto start = std::chrono::high_resolution_clock::now();
+    auto result = VectorizationPipeline::Execute(
+        image, segParams, quantParams, bridgingParams,
+        smoothParams, inflationParams, dropletParams,
+        svgParams, modifiers
+    );
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration<double, std::milli>(end - start).count();
+    
+    std::cout << "  Total contours: " << result.contours.size() << "\n";
+    std::cout << "  Z-order indices: " << result.zOrderIndices.size() << "\n";
+    std::cout << "  Total time: " << duration << " ms\n";
+    std::cout << "  Stage timings:\n";
+    for (const auto& [stage, time] : result.timings) {
+        std::cout << "    " << stage << ": " << time << " ms\n";
+    }
+    
+    // Export to SVG
+    bool success = VectorizationPipeline::ExportToSVG(result, "test_complete_pipeline.svg", svgParams);
+    if (success) {
+        std::cout << "  Saved: test_complete_pipeline.svg\n";
+    } else {
+        std::cout << "  ERROR: Failed to save SVG\n";
+    }
+}
+
 int main(int argc, char** argv) {
     std::cout << "=== Organic Vectoriser C++ Foundation Tests ===\n";
     
@@ -322,6 +397,7 @@ int main(int argc, char** argv) {
         TestSmoothing();
         TestInflation();
         TestFullPipeline(image);
+        TestCompletePipeline(image);
         
         std::cout << "\n=== All Tests Completed Successfully ===\n";
         std::cout << "\nGenerated files:\n";
@@ -331,6 +407,7 @@ int main(int argc, char** argv) {
         std::cout << "  - test_smoothing.png\n";
         std::cout << "  - test_inflation.png\n";
         std::cout << "  - test_pipeline_result.png\n";
+        std::cout << "  - test_complete_pipeline.svg\n";
         
         return 0;
     }

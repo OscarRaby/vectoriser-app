@@ -41,7 +41,13 @@ cv::Vec3b ContourService::FindDominantColor(
     const cv::Mat& quantizedImage,
     const cv::Mat& mask
 ) {
-    std::map<cv::Vec3b, int, std::less<>> colorCounts;
+    // Custom comparator for cv::Vec3b
+    auto vec3bCompare = [](const cv::Vec3b& a, const cv::Vec3b& b) {
+        if (a[0] != b[0]) return a[0] < b[0];
+        if (a[1] != b[1]) return a[1] < b[1];
+        return a[2] < b[2];
+    };
+    std::map<cv::Vec3b, int, decltype(vec3bCompare)> colorCounts(vec3bCompare);
     
     for (int y = 0; y < mask.rows; y++) {
         for (int x = 0; x < mask.cols; x++) {

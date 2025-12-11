@@ -4,17 +4,22 @@ project(OrganicVectoriserCpp VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find OpenCV
-find_package(OpenCV REQUIRED)
+# Find OpenCV (vcpkg installs as opencv4)
+find_package(OpenCV CONFIG REQUIRED)
 
 # Optional: FastNoise2 support for Perlin noise
 option(USE_FASTNOISE "Enable FastNoise2 for Perlin noise generation" OFF)
 
-# Source files (only implemented ones for now)
+# Source files
 set(SOURCES
     SegmentationService.cpp
     ContourService.cpp
     GeometryService.cpp
+    BridgingService.cpp
+    SortingService.cpp
+    SVGWriter.cpp
+    ParameterScaler.cpp
+    VectorizationPipeline.cpp
 )
 
 set(HEADERS
@@ -22,6 +27,11 @@ set(HEADERS
     SegmentationService.h
     ContourService.h
     GeometryService.h
+    BridgingService.h
+    SortingService.h
+    SVGWriter.h
+    ParameterScaler.h
+    VectorizationPipeline.h
 )
 
 # Create library
