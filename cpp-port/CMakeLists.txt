@@ -20,6 +20,7 @@ set(SOURCES
     SVGWriter.cpp
     ParameterScaler.cpp
     VectorizationPipeline.cpp
+    NativeBridge.cpp
 )
 
 set(HEADERS
@@ -32,10 +33,16 @@ set(HEADERS
     SVGWriter.h
     ParameterScaler.h
     VectorizationPipeline.h
+    NativeBridge.h
 )
 
 # Create library
 add_library(OrganicVectoriser STATIC ${SOURCES} ${HEADERS})
+
+# Native bridge DLL for C# interop
+add_library(OrganicVectoriserNative SHARED NativeBridge.cpp)
+target_link_libraries(OrganicVectoriserNative PUBLIC OrganicVectoriser ${OpenCV_LIBS})
+target_include_directories(OrganicVectoriserNative PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_include_directories(OrganicVectoriser PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}

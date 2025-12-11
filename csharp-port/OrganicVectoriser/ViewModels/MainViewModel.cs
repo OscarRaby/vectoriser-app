@@ -14,7 +14,7 @@ namespace OrganicVectoriser.ViewModels;
 public sealed class MainViewModel : BaseViewModel
 {
     private readonly IImageService _imageService = new ImageService();
-    private readonly IPipelineService _pipelineService = new PipelineService();
+    private readonly IPipelineService _pipelineService = new NativePipelineService();
     private readonly ISvgExportService _svgExportService = new SvgExportService();
     private readonly IRenderService _renderService = new RenderService();
     private readonly IPresetService _presetService = new PresetService();
@@ -237,6 +237,11 @@ public sealed class MainViewModel : BaseViewModel
     private async Task RunDiagnosticsAsync()
     {
         if (_currentBitmap is null) return;
+        if (_pipelineService is NativePipelineService)
+        {
+            Status = "Diagnostics are not available for the native pipeline yet.";
+            return;
+        }
         try
         {
             Status = "Running diagnostics...";

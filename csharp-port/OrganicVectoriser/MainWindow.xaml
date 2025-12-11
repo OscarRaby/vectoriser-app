@@ -27,52 +27,94 @@
                 <Separator />
 
                 <TextBlock Text="Noise Scale" />
-                <Slider Minimum="10" Maximum="200" TickFrequency="5" Value="{Binding Parameters.NoiseScale, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="10" Maximum="200" TickFrequency="5" Width="220" Value="{Binding Parameters.NoiseScale, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.NoiseScale, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Blur Sigma" />
-                <Slider Minimum="0.1" Maximum="10" TickFrequency="0.1" Value="{Binding Parameters.BlurSigma, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0.1" Maximum="10" TickFrequency="0.1" Width="220" Value="{Binding Parameters.BlurSigma, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.BlurSigma, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Compactness" />
-                <Slider Minimum="0.0001" Maximum="1" TickFrequency="0.001" Value="{Binding Parameters.Compactness, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0.0001" Maximum="1" TickFrequency="0.001" Width="220" Value="{Binding Parameters.Compactness, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.Compactness, StringFormat={}{0:0.####}}" />
+                </StackPanel>
 
                 <TextBlock Text="Max Colors" />
-                <Slider Minimum="2" Maximum="32" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.MaxColors, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="2" Maximum="32" TickFrequency="1" IsSnapToTickEnabled="True" Width="220" Value="{Binding Parameters.MaxColors, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.MaxColors, StringFormat={}{0:0}}" />
+                </StackPanel>
 
                 <TextBlock Text="Segmentation Multiplier" />
-                <Slider Minimum="0.1" Maximum="10" TickFrequency="0.1" Value="{Binding Parameters.SegmentationMultiplier, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0.1" Maximum="10" TickFrequency="0.1" Width="220" Value="{Binding Parameters.SegmentationMultiplier, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.SegmentationMultiplier, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <Separator Margin="0 8 0 8" />
                 <TextBlock Text="Bridging Parameters" FontWeight="Bold" />
 
                 <TextBlock Text="Bridge Distance" />
-                <Slider Minimum="0" Maximum="100" TickFrequency="1" Value="{Binding Parameters.BridgeDistance, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="100" TickFrequency="1" Width="220" Value="{Binding Parameters.BridgeDistance, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.BridgeDistance, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Color Tolerance" />
-                <Slider Minimum="0" Maximum="100" TickFrequency="1" Value="{Binding Parameters.ColorTolerance, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="100" TickFrequency="1" Width="220" Value="{Binding Parameters.ColorTolerance, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.ColorTolerance, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Proximity Threshold" />
-                <Slider Minimum="0" Maximum="200" TickFrequency="1" Value="{Binding Parameters.ProximityThreshold, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="200" TickFrequency="1" Width="220" Value="{Binding Parameters.ProximityThreshold, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.ProximityThreshold, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Falloff Radius" />
-                <Slider Minimum="1" Maximum="30" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.FalloffRadius, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="1" Maximum="30" TickFrequency="1" IsSnapToTickEnabled="True" Width="220" Value="{Binding Parameters.FalloffRadius, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.FalloffRadius, StringFormat={}{0:0}}" />
+                </StackPanel>
 
                 <TextBlock Text="Max Curvature (degrees)" />
-                <Slider Minimum="1" Maximum="360" TickFrequency="1" Value="{Binding Parameters.MaxCurvatureDegrees, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="1" Maximum="360" TickFrequency="1" Width="220" Value="{Binding Parameters.MaxCurvatureDegrees, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.MaxCurvatureDegrees, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <Separator Margin="0 8 0 8" />
                 <TextBlock Text="Smoothing &amp; Inflation" FontWeight="Bold" />
 
                 <TextBlock Text="Smooth Iterations" />
-                <Slider Minimum="1" Maximum="20" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.SmoothIterations, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="1" Maximum="20" TickFrequency="1" IsSnapToTickEnabled="True" Width="220" Value="{Binding Parameters.SmoothIterations, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.SmoothIterations, StringFormat={}{0:0}}" />
+                </StackPanel>
 
                 <TextBlock Text="Smooth Alpha" />
-                <Slider Minimum="0.01" Maximum="1" TickFrequency="0.01" Value="{Binding Parameters.SmoothAlpha, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0.01" Maximum="1" TickFrequency="0.01" Width="220" Value="{Binding Parameters.SmoothAlpha, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.SmoothAlpha, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Blob Inflation Amount" />
-                <Slider Minimum="0" Maximum="50" TickFrequency="0.1" Value="{Binding Parameters.BlobInflationAmount, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="50" TickFrequency="0.1" Width="220" Value="{Binding Parameters.BlobInflationAmount, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.BlobInflationAmount, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Far Point Inflation Factor" />
-                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.FarPointInflationFactor, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Width="220" Value="{Binding Parameters.FarPointInflationFactor, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.FarPointInflationFactor, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <CheckBox Content="Inflation Proportional to Stacking" IsChecked="{Binding Parameters.InflationProportionalToStacking, Mode=TwoWay}" />
 
@@ -80,25 +122,46 @@
                 <TextBlock Text="Droplet Parameters (Painterly)" FontWeight="Bold" />
 
                 <TextBlock Text="Droplet Density" />
-                <Slider Minimum="0" Maximum="10" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.DropletDensity, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="10" TickFrequency="1" IsSnapToTickEnabled="True" Width="220" Value="{Binding Parameters.DropletDensity, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletDensity, StringFormat={}{0:0}}" />
+                </StackPanel>
 
                 <TextBlock Text="Droplet Min Distance" />
-                <Slider Minimum="0" Maximum="100" TickFrequency="1" Value="{Binding Parameters.DropletMinDistance, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="100" TickFrequency="1" Width="220" Value="{Binding Parameters.DropletMinDistance, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletMinDistance, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Droplet Max Distance" />
-                <Slider Minimum="0" Maximum="200" TickFrequency="1" Value="{Binding Parameters.DropletMaxDistance, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="200" TickFrequency="1" Width="220" Value="{Binding Parameters.DropletMaxDistance, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletMaxDistance, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Droplet Size Mean" />
-                <Slider Minimum="1" Maximum="50" TickFrequency="0.1" Value="{Binding Parameters.DropletSizeMean, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="1" Maximum="50" TickFrequency="0.1" Width="220" Value="{Binding Parameters.DropletSizeMean, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletSizeMean, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Droplet Size Std" />
-                <Slider Minimum="0" Maximum="20" TickFrequency="0.1" Value="{Binding Parameters.DropletSizeStd, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="20" TickFrequency="0.1" Width="220" Value="{Binding Parameters.DropletSizeStd, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletSizeStd, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Droplet Spread (degrees)" />
-                <Slider Minimum="0" Maximum="90" TickFrequency="1" Value="{Binding Parameters.DropletSpreadDegrees, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="90" TickFrequency="1" Width="220" Value="{Binding Parameters.DropletSpreadDegrees, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletSpreadDegrees, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Droplet Global Rotation (degrees)" />
-                <Slider Minimum="-180" Maximum="180" TickFrequency="1" Value="{Binding Parameters.DropletGlobalRotation, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="-180" Maximum="180" TickFrequency="1" Width="220" Value="{Binding Parameters.DropletGlobalRotation, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletGlobalRotation, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <CheckBox Content="Use SVG Primitives (Ellipse/Rect)" IsChecked="{Binding Parameters.PainterlyUseSvgEllipses, Mode=TwoWay}" />
                 <CheckBox Content="Rect Horizontal Mode" IsChecked="{Binding Parameters.PainterlyRectHorizontal, Mode=TwoWay}" />
@@ -107,28 +170,49 @@
                 <TextBlock Text="Organic Droplet Parameters" FontWeight="Bold" />
 
                 <TextBlock Text="Organic Min Brightness (0-255)" />
-                <Slider Minimum="0" Maximum="255" TickFrequency="1" Value="{Binding Parameters.DropletOrganicMinBrightness, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="255" TickFrequency="1" Width="220" Value="{Binding Parameters.DropletOrganicMinBrightness, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletOrganicMinBrightness, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Organic Density" />
-                <Slider Minimum="0" Maximum="20" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Parameters.DropletOrganicDensity, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="20" TickFrequency="1" IsSnapToTickEnabled="True" Width="220" Value="{Binding Parameters.DropletOrganicDensity, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletOrganicDensity, StringFormat={}{0:0}}" />
+                </StackPanel>
 
                 <TextBlock Text="Organic Strength" />
-                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.DropletOrganicStrength, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Width="220" Value="{Binding Parameters.DropletOrganicStrength, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletOrganicStrength, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Organic Jitter" />
-                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.DropletOrganicJitter, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Width="220" Value="{Binding Parameters.DropletOrganicJitter, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletOrganicJitter, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Organic Elongation" />
-                <Slider Minimum="-2" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.DropletOrganicElongation, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="-2" Maximum="5" TickFrequency="0.01" Width="220" Value="{Binding Parameters.DropletOrganicElongation, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletOrganicElongation, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Organic Percent Per Blob (%)" />
-                <Slider Minimum="0" Maximum="100" TickFrequency="0.1" Value="{Binding Parameters.DropletOrganicPercentPerBlob, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="100" TickFrequency="0.1" Width="220" Value="{Binding Parameters.DropletOrganicPercentPerBlob, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.DropletOrganicPercentPerBlob, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <Separator Margin="0 8 0 8" />
                 <TextBlock Text="Other Settings" FontWeight="Bold" />
 
                 <TextBlock Text="Simplify Tolerance (pixels)" />
-                <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Value="{Binding Parameters.SimplifyTolerance, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Slider Minimum="0" Maximum="5" TickFrequency="0.01" Width="220" Value="{Binding Parameters.SimplifyTolerance, Mode=TwoWay}" />
+                    <TextBlock Width="70" Margin="8 0 0 0" Text="{Binding Parameters.SimplifyTolerance, StringFormat={}{0:0.##}}" />
+                </StackPanel>
 
                 <TextBlock Text="Stacking Order" />
                 <ComboBox SelectedValue="{Binding Parameters.StackingOrder, Mode=TwoWay}">
